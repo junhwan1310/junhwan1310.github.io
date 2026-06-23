@@ -715,7 +715,7 @@
         html: `
           <div class="page">
             <h1>박준환 Portfolio OS</h1>
-            <p>웹 데스크톱 OS 스타일로 구성한 개인 포트폴리오입니다. 아이콘을 더블클릭하면 각 프로젝트가 창 형태로 열립니다.</p>
+            <p>웹 데스크톱 OS 스타일로 구성한 개인 포트폴리오입니다. 아이콘을 클릭하면 각 프로젝트가 창 형태로 열립니다.</p>
             <div class="cards">
               <div class="card"><h2>ERP Project</h2><p>상품, 거래처, 재고, 발주, 생산 화면 구현 및 성능 개선 경험을 정리했습니다.</p></div>
               <div class="card"><h2>App Project</h2><p>반려동물 관리 앱 화면 GIF를 세로 흐름으로 확인할 수 있도록 구성했습니다.</p></div>
@@ -852,11 +852,38 @@
         html: `
           <div class="page">
             <h1>Troubleshooting</h1>
-            <h2>ERP 조회 속도 및 상품 등록/수정 처리 개선</h2>
-            <p><b>원인:</b> 관리 화면 진입 시 DB 조회가 끝난 뒤에야 화면이 나타나 사용자가 멈춘 것처럼 느낄 수 있었습니다.</p>
-            <p><b>해결:</b> 화면 구조를 먼저 렌더링하고 이후 데이터를 불러와 반영하는 방식으로 개선했습니다.</p>
+
+            <h2>ERP 조회 화면 체감 속도 개선</h2>
+            <div class="cards">
+              <div class="card">
+                <h3>문제</h3>
+                <p>관리 화면 진입 시 DB 조회가 끝난 뒤에야 화면이 나타나 사용자가 멈춘 것처럼 느낄 수 있었습니다.</p>
+              </div>
+              <div class="card">
+                <h3>해결</h3>
+                <p>화면 구조를 먼저 렌더링하고, 이후 데이터를 불러와 반영하는 방식으로 개선했습니다.</p>
+              </div>
+              <div class="card">
+                <h3>배운 점</h3>
+                <p>실제 속도뿐 아니라 사용자가 느끼는 체감 속도도 중요하다는 것을 배웠고, 로딩 순서와 화면 피드백을 고려하게 되었습니다.</p>
+              </div>
+            </div>
+
             <h2>상품 등록 모달 개선</h2>
-            <p>초기 등록 모달의 입력 항목이 많아 필수값 검증과 등록 체감 속도가 느렸고, 핵심 필드 중심으로 줄여 사용성을 개선했습니다.</p>
+            <div class="cards">
+              <div class="card">
+                <h3>문제</h3>
+                <p>초기 등록 모달의 입력 항목이 많아 필수값 확인이 어렵고 등록 과정이 복잡하게 느껴졌습니다.</p>
+              </div>
+              <div class="card">
+                <h3>해결</h3>
+                <p>핵심 필드 중심으로 입력 항목을 정리하고, 등록 흐름을 더 단순하게 구성했습니다.</p>
+              </div>
+              <div class="card">
+                <h3>배운 점</h3>
+                <p>기능을 많이 넣는 것보다 사용자가 빠르게 이해하고 입력할 수 있는 구조가 더 중요하다는 점을 배웠습니다.</p>
+              </div>
+            </div>
           </div>`
       },
       contact: {
@@ -882,7 +909,16 @@
     Object.entries(apps).forEach(([id, app]) => {
       const icon = document.createElement("div");
       icon.className = "icon";
-      icon.ondblclick = () => openApp(id);
+      icon.tabIndex = 0;
+      icon.setAttribute("role", "button");
+      icon.setAttribute("aria-label", `${app.label} 열기`);
+      icon.onclick = () => openApp(id);
+      icon.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openApp(id);
+        }
+      });
       icon.innerHTML = `<div class="emoji">${app.icon}</div><div class="label">${app.label}</div>`;
       desktop.appendChild(icon);
     });
